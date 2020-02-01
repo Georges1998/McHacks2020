@@ -1,6 +1,6 @@
 import React from 'react';
 import {Switch, Route} from "react-router-dom";
-import { auth } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument} from './firebase/firebase.utils';
 
 import './App.css';
 
@@ -8,6 +8,8 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import Header from './components/header/header.component';
 import About from './components/about/about.component';
 import Contact from './components/contactus/contactus.component';
+import Shelter from "./components/shelter/shelter.component"
+
 
 class App extends React.Component {
   constructor() {
@@ -19,12 +21,20 @@ class App extends React.Component {
   }
 
   unsubscribeFromAuth = null;
-
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
+    const { setCurrentUser } = this.props;
 
-      console.log(user);
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot(snapShot => {
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()
+          });
+        });
+      }
     });
   }
 
@@ -38,6 +48,7 @@ class App extends React.Component {
         <Header currentUser={this.state.currentUser} />
         <Switch>
           <Route path='/signin' component={SignInAndSignUpPage} />
+          <Route path='/shelter' component={Shelter} />
         </Switch>
         <About></About>
         <Contact></Contact>
