@@ -11,7 +11,7 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import Header from './components/header/header.component';
 import About from './components/about/about.component';
 import Contact from './components/contactus/contactus.component';
-import ShelterPage from "./pages/shelter/shelter.component"
+import {ShelterPage} from "./pages/shelter/shelter.component"
 
 
 class App extends React.Component {
@@ -58,13 +58,13 @@ class App extends React.Component {
             path='/signin'
             render={() =>
               this.props.currentUser ? (
-                <Redirect to='/' />
+                <Redirect to='/shelters' />
               ) : (
                 <SignInAndSignUpPage />
               )
             }
           />
-          <ShelterList shelters={shelters}></ShelterList>
+          <Route path="/shelters" component={ShelterPage}/>
         <About></About>
        
         <Contact></Contact>
