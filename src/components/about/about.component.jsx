@@ -2,7 +2,8 @@ import React from "react";
 
 const About = ()=>(
     <div>
-<h1>Here's the about: </h1>
+<h1>FeedMe is a locally-owned food provided that supports shelters 
+    with quality food.  </h1>
     </div>
 );
 
